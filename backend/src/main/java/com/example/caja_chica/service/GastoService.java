@@ -84,10 +84,16 @@ public class GastoService {
         Gasto aprobado = gastoRepository.save(gasto);
         notificacionService.notificarAprobacion(aprobado);
 
-        BigDecimal limite = presupuesto.getPresupuestoMensual()
+        BigDecimal limitePresupuesto = presupuesto.getPresupuestoMensual()
             .multiply(new BigDecimal("0.80"));
-        if (presupuesto.getConsumoActual().compareTo(limite) >= 0) {
-            notificacionService.notificarPresupuestoAgotado(presupuesto);
+        if (presupuesto.getConsumoActual().compareTo(limitePresupuesto) >= 0) {
+            notificacionService.notificarPresupuestoAlerta(presupuesto);
+        }
+
+        BigDecimal diezPorCiento = caja.getMontoInicial()
+            .multiply(new BigDecimal("0.10"));
+        if (caja.getSaldoActual().compareTo(diezPorCiento) <= 0) {
+            notificacionService.notificarSaldoBajo(caja);
         }
 
         return aprobado;

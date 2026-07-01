@@ -63,7 +63,7 @@ public class NotificacionService {
     }
 
     @Transactional
-    public void notificarPresupuestoAgotado(PresupuestoArea presupuesto) {
+    public void notificarPresupuestoAlerta(PresupuestoArea presupuesto) {
         if (presupuesto.getDepartamento() == null) return;
         List<Usuario> usuariosDepto = usuarioRepository.findByDepartamentoNombreIgnoreCase(
             presupuesto.getDepartamento().getNombre());
@@ -73,11 +73,28 @@ public class NotificacionService {
             n.setMensaje("Presupuesto casi agotado en " + presupuesto.getDepartamento().getNombre() +
                          " para " + presupuesto.getMes() +
                          ". Disponible: S/. " + disponible);
-            n.setTipo("PRESUPUESTO_AGOTADO");
+            n.setTipo("PRESUPUESTO_ALERTA");
             n.setLeido(false);
             n.setFechaCreacion(LocalDateTime.now());
             n.setUsuario(u);
             n.setPresupuestoArea(presupuesto);
+            notificacionRepository.save(n);
+        }
+    }
+
+    @Transactional
+    public void notificarSaldoBajo(CajaChica caja) {
+        if (caja.getDepartamento() == null) return;
+        List<Usuario> usuariosDepto = usuarioRepository.findByDepartamentoNombreIgnoreCase(
+            caja.getDepartamento().getNombre());
+        for (Usuario u : usuariosDepto) {
+            Notificacion n = new Notificacion();
+            n.setMensaje("Saldo bajo en caja chica de " + caja.getDepartamento().getNombre() +
+                         ". Saldo actual: S/. " + caja.getSaldoActual());
+            n.setTipo("SALDO_BAJO");
+            n.setLeido(false);
+            n.setFechaCreacion(LocalDateTime.now());
+            n.setUsuario(u);
             notificacionRepository.save(n);
         }
     }
