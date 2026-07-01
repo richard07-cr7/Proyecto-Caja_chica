@@ -1,0 +1,60 @@
+<main class="page">
+  <h1 class="page-title">Notificaciones</h1>
+
+  <div class="msg ok show" *ngIf="mensaje && tipoMensaje === 'ok'">{{ mensaje }}</div>
+  <div class="msg error show" *ngIf="mensaje && tipoMensaje === 'error'">{{ mensaje }}</div>
+
+  <div class="card">
+    <div class="section-header">
+      <h2>Mis Notificaciones</h2>
+      <div style="display:flex; gap:.5rem;">
+        <button class="btn btn-secondary" style="font-size:.8rem; padding:.4rem .9rem;" (click)="cargarNotificaciones()">
+          ↻ Actualizar
+        </button>
+        <button class="btn btn-primary" style="font-size:.8rem; padding:.4rem .9rem;" (click)="marcarTodasLeidas()">
+          ✓ Marcar todas como leídas
+        </button>
+      </div>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Fecha</th>
+            <th>Tipo</th>
+            <th>Mensaje</th>
+            <th>Estado</th>
+            <th>Acción</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="notificaciones.length === 0">
+            <td colspan="5" style="text-align:center; color:var(--texto-soft); padding:2rem;">
+              Sin notificaciones
+            </td>
+          </tr>
+          <tr *ngFor="let n of notificaciones" [style.background]="!n.leido ? 'var(--primario-light)' : ''">
+            <td style="font-size:.85rem;">{{ n.fechaCreacion | date:'dd/MM/yyyy HH:mm' }}</td>
+            <td><span [class]="badgeTipo(n.tipo)">{{ n.tipo }}</span></td>
+            <td>{{ n.mensaje }}</td>
+            <td>
+              <span class="badge badge-aprobado" *ngIf="n.leido">Leída</span>
+              <span class="badge badge-pendiente" *ngIf="!n.leido">No leída</span>
+            </td>
+            <td>
+              <button
+                *ngIf="!n.leido"
+                class="btn btn-secondary"
+                style="font-size:.75rem; padding:.3rem .7rem;"
+                (click)="marcarLeida(n.id)">
+                ✓ Marcar leída
+              </button>
+              <span *ngIf="n.leido" style="color:var(--texto-soft); font-size:.85rem;">—</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>

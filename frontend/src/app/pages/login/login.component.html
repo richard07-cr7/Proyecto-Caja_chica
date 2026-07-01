@@ -1,0 +1,46 @@
+<div class="login-wrap">
+  <div class="login-box">
+
+    <div class="logo">
+      💰 Caja <span>Chica</span>
+    </div>
+
+    <div class="card">
+      <h2 style="margin-bottom:1.5rem; font-size:1.1rem; color:var(--gris-900);">
+        Iniciar Sesión
+      </h2>
+
+      <div class="msg error show" *ngIf="mensaje && tipoMensaje === 'error'">
+        {{ mensaje }}
+      </div>
+
+      <div class="form-group" style="margin-bottom:1rem;">
+        <label for="username">Usuario</label>
+        <input
+          type="text"
+          id="username"
+          placeholder="Ingresa tu usuario"
+          [(ngModel)]="username"
+          autocomplete="username"
+        />
+      </div>
+
+      <div class="form-group" style="margin-bottom:1.5rem;">
+        <label for="password">Contraseña</label>
+        <input
+          type="password"
+          id="password"
+          placeholder="••••••••"
+          [(ngModel)]="password"
+          (keydown)="onEnter($event)"
+          autocomplete="current-password"
+        />
+      </div>
+
+      <button class="btn btn-primary" style="width:100%; justify-content:center;" (click)="login()">
+        Ingresar
+      </button>
+    </div>
+
+  </div>
+</div>

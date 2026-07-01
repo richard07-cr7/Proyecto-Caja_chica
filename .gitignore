@@ -1,0 +1,12 @@
+# ===== Backend (Java/Spring Boot - NetBeans) =====
+backend/target/
+backend/build/
+backend/.mvn/
+backend/*.class
+backend/nbproject/private/
+backend/application-local.properties
+
+# ===== General =====
+.env
+*.log
+.DS_Store

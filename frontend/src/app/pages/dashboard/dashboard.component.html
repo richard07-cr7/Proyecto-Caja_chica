@@ -1,0 +1,87 @@
+<main class="page">
+  <h1 class="page-title">Dashboard</h1>
+
+  <div class="msg ok show" *ngIf="mensaje && tipoMensaje === 'ok'">{{ mensaje }}</div>
+  <div class="msg error show" *ngIf="mensaje && tipoMensaje === 'error'">{{ mensaje }}</div>
+
+  <!-- Stats -->
+  <div class="cards-grid">
+    <div class="card stat-card">
+      <div class="label">Cajas registradas</div>
+      <div class="value azul">{{ totalCajas }}</div>
+    </div>
+    <div class="card stat-card" *ngIf="esAdmin">
+      <div class="label">Total gastos</div>
+      <div class="value amarillo">{{ totalGastos }}</div>
+    </div>
+    <div class="card stat-card" *ngIf="esAdmin">
+      <div class="label">Gastos pendientes</div>
+      <div class="value rojo">{{ totalPendientes }}</div>
+    </div>
+    <div class="card stat-card">
+      <div class="label">{{ esAdmin ? 'Saldo total' : 'Saldo de tu caja' }}</div>
+      <div class="value verde">S/. {{ saldoTotal | number:'1.2-2' }}</div>
+    </div>
+  </div>
+
+  <!-- Formulario nueva caja (solo ADMIN) -->
+  <div class="card" *ngIf="esAdmin">
+    <div class="section-header">
+      <h2>Nueva Caja Chica</h2>
+    </div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Departamento</label>
+        <select [(ngModel)]="deptoId">
+          <option [value]="null">Selecciona departamento</option>
+          <option *ngFor="let d of departamentos" [value]="d.id">{{ d.nombre }}</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Monto Inicial (S/.)</label>
+        <input type="number" placeholder="Ej: 500.00" min="0.01" step="0.01" [(ngModel)]="montoInicial" />
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="crearCaja()">+ Crear Caja</button>
+  </div>
+
+  <!-- Tabla de cajas -->
+  <div class="card">
+    <div class="section-header">
+      <h2>Cajas Registradas</h2>
+      <button class="btn btn-secondary" style="font-size:.8rem; padding:.4rem .9rem;" (click)="cargarCajas()">
+        ↻ Actualizar
+      </button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Departamento</th>
+            <th>Monto Inicial</th>
+            <th>Saldo Actual</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="cajas.length === 0">
+            <td colspan="5" style="text-align:center; color:var(--texto-soft); padding:2rem;">
+              No hay cajas registradas
+            </td>
+          </tr>
+          <tr *ngFor="let c of cajas">
+            <td style="font-family:monospace;">#{{ c.id }}</td>
+            <td>{{ c.departamento?.nombre || '—' }}</td>
+            <td>S/. {{ c.montoInicial | number:'1.2-2' }}</td>
+            <td>S/. {{ c.saldoActual | number:'1.2-2' }}</td>
+            <td>
+              <span class="badge badge-aprobado" *ngIf="activa(c)">Activa</span>
+              <span class="badge badge-rechazado" *ngIf="!activa(c)">Sin saldo</span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>

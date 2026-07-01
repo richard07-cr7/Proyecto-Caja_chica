@@ -1,0 +1,115 @@
+<main class="page">
+  <h1 class="page-title">Gestión de Usuarios</h1>
+
+  <div class="msg ok show" *ngIf="mensaje && tipoMensaje === 'ok'">{{ mensaje }}</div>
+  <div class="msg error show" *ngIf="mensaje && tipoMensaje === 'error'">{{ mensaje }}</div>
+
+  <!-- Registrar usuario -->
+  <div class="card">
+    <div class="section-header"><h2>Registrar Usuario</h2></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Nombre de usuario</label>
+        <input type="text" placeholder="Ej: jperez" [(ngModel)]="username" />
+      </div>
+      <div class="form-group">
+        <label>Contraseña</label>
+        <input type="password" placeholder="••••••••" [(ngModel)]="password" />
+      </div>
+      <div class="form-group">
+        <label>Rol</label>
+        <select [(ngModel)]="rol">
+          <option value="EMPLEADO">Empleado</option>
+          <option value="ADMIN">Administrador</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Departamento</label>
+        <select [(ngModel)]="deptoId">
+          <option [value]="null">Sin departamento</option>
+          <option *ngFor="let d of departamentos" [value]="d.id">{{ d.nombre }}</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-primary" (click)="registrar()">+ Registrar Usuario</button>
+  </div>
+
+  <!-- Modal editar -->
+  <div *ngIf="mostrarModal" style="display:flex; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:1000; align-items:center; justify-content:center;" (click)="cerrarModal()">
+    <div class="card" style="width:100%; max-width:500px; margin:1rem;" (click)="$event.stopPropagation()">
+      <div class="section-header">
+        <h2>Editar Usuario</h2>
+        <button class="btn btn-secondary" style="font-size:.8rem; padding:.4rem .9rem;" (click)="cerrarModal()">✕ Cerrar</button>
+      </div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre de usuario</label>
+          <input type="text" [(ngModel)]="editUsername" />
+        </div>
+        <div class="form-group">
+          <label>Nueva contraseña <span style="color:var(--texto-soft); font-size:.8rem;">(dejar vacío para no cambiar)</span></label>
+          <input type="password" placeholder="••••••••" [(ngModel)]="editPassword" />
+        </div>
+        <div class="form-group">
+          <label>Rol</label>
+          <select [(ngModel)]="editRol">
+            <option value="EMPLEADO">Empleado</option>
+            <option value="ADMIN">Administrador</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Departamento</label>
+          <select [(ngModel)]="editDeptoId">
+            <option [value]="null">Sin departamento</option>
+            <option *ngFor="let d of departamentos" [value]="d.id">{{ d.nombre }}</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex; gap:.5rem; margin-top:1rem;">
+        <button class="btn btn-primary" (click)="guardarEdicion()">Guardar cambios</button>
+        <button class="btn btn-secondary" (click)="cerrarModal()">Cancelar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla usuarios -->
+  <div class="card">
+    <div class="section-header">
+      <h2>Usuarios Registrados</h2>
+      <button class="btn btn-secondary" style="font-size:.8rem; padding:.4rem .9rem;" (click)="cargarUsuarios()">↻ Actualizar</button>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Departamento</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="usuarios.length === 0">
+            <td colspan="5" style="text-align:center; color:var(--texto-soft); padding:2rem;">No hay usuarios registrados</td>
+          </tr>
+          <tr *ngFor="let u of usuarios">
+            <td style="font-family:monospace; color:var(--texto-soft);">{{ u.id }}</td>
+            <td>{{ u.username }}</td>
+            <td>
+              <span class="badge badge-admin" *ngIf="u.rol === 'ADMIN'">ADMIN</span>
+              <span class="badge badge-empleado" *ngIf="u.rol !== 'ADMIN'">EMPLEADO</span>
+            </td>
+            <td>{{ u.departamento?.nombre || '—' }}</td>
+            <td>
+              <div style="display:flex; gap:.4rem;">
+                <button class="btn btn-secondary" style="font-size:.75rem; padding:.3rem .7rem;" (click)="abrirModal(u)">✏ Editar</button>
+                <button class="btn btn-danger" style="font-size:.75rem; padding:.3rem .7rem;" (click)="eliminar(u.id)">Eliminar</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>

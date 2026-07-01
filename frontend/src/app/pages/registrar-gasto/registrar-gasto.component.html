@@ -1,0 +1,102 @@
+<main class="page">
+  <h1 class="page-title">Registrar Gasto</h1>
+
+  <div class="msg ok show" *ngIf="mensaje && tipoMensaje === 'ok'">{{ mensaje }}</div>
+  <div class="msg error show" *ngIf="mensaje && tipoMensaje === 'error'">{{ mensaje }}</div>
+
+  <div class="card">
+    <div class="section-header">
+      <h2>Nuevo Gasto</h2>
+    </div>
+
+    <div class="form-grid" style="margin-bottom:1rem;">
+      <div class="form-group">
+        <label>Tu Área</label>
+        <input type="text" [value]="areaNombre" readonly style="background:var(--gris-100); cursor:not-allowed;" />
+      </div>
+      <div class="form-group">
+        <label>Caja del Área</label>
+        <select [(ngModel)]="cajaId">
+          <option [value]="null">Sin cajas disponibles</option>
+          <option *ngFor="let c of cajas" [value]="c.id">
+            Caja #{{ c.id }} — Saldo S/. {{ c.saldoActual | number:'1.2-2' }}
+          </option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Presupuesto del Mes</label>
+        <select [(ngModel)]="presupuestoId">
+          <option [value]="null">Sin presupuesto asignado</option>
+          <option *ngFor="let p of presupuestos" [value]="p.id">
+            {{ p.mes }} — S/. {{ p.presupuestoMensual | number:'1.2-2' }}
+          </option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Categoría</label>
+        <input type="text" placeholder="Ej: Transporte, Materiales" [(ngModel)]="categoria" />
+      </div>
+      <div class="form-group">
+        <label>Monto (S/.)</label>
+        <input type="number" placeholder="0.00" min="0.01" step="0.01" [(ngModel)]="monto" />
+      </div>
+      <div class="form-group">
+        <label>Descripción</label>
+        <input type="text" placeholder="Detalle del gasto" [(ngModel)]="descripcion" />
+      </div>
+      <div class="form-group">
+        <label>Comprobante (JPG, PNG, PDF)</label>
+        <input type="file" accept=".jpg,.jpeg,.png,.pdf" (change)="onArchivoSeleccionado($event)" />
+      </div>
+    </div>
+
+    <div style="margin-top:1rem;">
+      <button class="btn btn-primary" (click)="registrar()">+ Registrar Gasto</button>
+      <button class="btn btn-secondary" style="margin-left:.5rem;" (click)="limpiar()">Limpiar</button>
+    </div>
+  </div>
+
+  <!-- Mis gastos recientes -->
+  <div class="card">
+    <div class="section-header">
+      <h2>Mis Gastos Recientes</h2>
+      <a routerLink="/gastos" class="btn btn-secondary" style="font-size:.8rem; padding:.4rem .9rem;">
+        Ver todos →
+      </a>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Categoría</th>
+            <th>Monto</th>
+            <th>Estado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngIf="misGastos.length === 0">
+            <td colspan="5" style="text-align:center; color:var(--texto-soft); padding:2rem;">
+              Sin gastos registrados
+            </td>
+          </tr>
+          <tr *ngFor="let g of misGastos">
+            <td style="font-family:monospace;">{{ g.id }}</td>
+            <td>{{ g.descripcion || '—' }}</td>
+            <td>{{ g.categoria || '—' }}</td>
+            <td style="font-family:monospace;">S/. {{ g.monto | number:'1.2-2' }}</td>
+            <td>
+              <span [class]="badgeClase(g.estado || 'PENDIENTE')">
+                {{ g.estado || 'PENDIENTE' }}
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>

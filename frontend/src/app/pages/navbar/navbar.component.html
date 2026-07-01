@@ -1,0 +1,22 @@
+<header class="navbar">
+  <span class="brand">💰 Caja Chica</span>
+
+  <nav>
+    <a routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+    <a routerLink="/gastos" routerLinkActive="active">Gastos</a>
+    <a *ngIf="!esAdmin" routerLink="/registrar-gasto" routerLinkActive="active">Registrar Gasto</a>
+    <a *ngIf="esAdmin" routerLink="/presupuesto" routerLinkActive="active">Presupuesto</a>
+    <a *ngIf="esAdmin" routerLink="/usuarios" routerLinkActive="active">Usuarios</a>
+    <a routerLink="/notificaciones" routerLinkActive="active">
+      <span>Notificaciones</span>
+      <span *ngIf="noLeidas > 0" style="background:var(--rojo); color:white; border-radius:50%; padding:0 6px; font-size:.75rem; margin-left:4px;">
+        {{ noLeidas }}
+      </span>
+    </a>
+  </nav>
+
+  <div style="display:flex; align-items:center;">
+    <span class="user-info">{{ username }}</span>
+    <button class="btn-logout" (click)="logout()">Salir</button>
+  </div>
+</header>
