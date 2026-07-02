@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../core/services/auth.service';
@@ -18,11 +18,22 @@ export class LoginComponent {
   mensaje = '';
   tipoMensaje = '';
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     // Si ya está logueado, redirigir al dashboard
     if (this.authService.estaLogueado()) {
       this.router.navigate(['/dashboard']);
     }
+
+    this.route.queryParams.subscribe(params => {
+      if (params['sesion'] === 'expirada') {
+        this.mensaje = 'Tu sesión ha expirado. Inicia sesión nuevamente.';
+        this.tipoMensaje = 'error';
+      }
+    });
   }
 
   login() {

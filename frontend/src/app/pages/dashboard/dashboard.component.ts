@@ -19,6 +19,7 @@ export class DashboardComponent implements OnInit {
   cajas: CajaChica[] = [];
   departamentos: Departamento[] = [];
   esAdmin = false;
+  deptoId: number | null = null;
 
   // Stats
   totalCajas = 0;
@@ -27,7 +28,6 @@ export class DashboardComponent implements OnInit {
   saldoTotal = 0;
 
   // Formulario nueva caja
-  deptoId: number | null = null;
   montoInicial: number | null = null;
   mensaje = '';
   tipoMensaje = '';
@@ -44,14 +44,12 @@ export class DashboardComponent implements OnInit {
 
 
   ngOnInit() {
-  setTimeout(() => {
     this.cargarCajas();
     if (this.esAdmin) {
       this.cargarDepartamentos();
       this.cargarGastos();
     }
-  }, 100);
-}
+  }
 
   cargarCajas() {
   this.cajaService.listar().subscribe({

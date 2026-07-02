@@ -4,12 +4,36 @@
   <div class="msg ok show" *ngIf="mensaje && tipoMensaje === 'ok'">{{ mensaje }}</div>
   <div class="msg error show" *ngIf="mensaje && tipoMensaje === 'error'">{{ mensaje }}</div>
 
+  <!-- Filtros -->
+  <div class="card">
+    <div class="section-header"><h2>Filtros</h2></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Mes</label>
+        <input type="month" [(ngModel)]="filtroMes" (change)="aplicarFiltros()" />
+      </div>
+      <div class="form-group" *ngIf="esAdmin">
+        <label>Área</label>
+        <select [(ngModel)]="filtroDepto" (change)="aplicarFiltros()">
+          <option value="">Todas las áreas</option>
+          <option *ngFor="let d of departamentos" [value]="d.id">{{ d.nombre }}</option>
+        </select>
+      </div>
+    </div>
+    <button class="btn btn-secondary" (click)="limpiarFiltros()">✕ Limpiar filtros</button>
+  </div>
+
   <div class="card">
     <div class="section-header">
       <h2>{{ esAdmin ? 'Lista de Gastos' : 'Mis Gastos Registrados' }}</h2>
-      <button class="btn btn-secondary" style="font-size:.8rem; padding:.4rem .9rem;" (click)="cargarGastos()">
-        ↻ Actualizar
-      </button>
+      <div style="display:flex; gap:.5rem;">
+        <button class="btn btn-secondary" style="font-size:.8rem; padding:.4rem .9rem;" (click)="toggleOrden()">
+          {{ ordenDesc ? '↓ Más reciente' : '↑ Más antiguo' }}
+        </button>
+        <button class="btn btn-secondary" style="font-size:.8rem; padding:.4rem .9rem;" (click)="cargarGastos()">
+          ↻ Actualizar
+        </button>
+      </div>
     </div>
     <div class="table-wrap">
       <table>
@@ -27,12 +51,12 @@
           </tr>
         </thead>
         <tbody>
-          <tr *ngIf="gastos.length === 0">
+          <tr *ngIf="gastosFiltrados.length === 0">
             <td colspan="9" style="text-align:center; color:var(--texto-soft); padding:2rem;">
               Sin gastos registrados
             </td>
           </tr>
-          <tr *ngFor="let g of gastos">
+          <tr *ngFor="let g of gastosFiltrados">
             <td style="font-family:monospace; color:var(--texto-soft);">{{ g.id }}</td>
             <td style="font-size:.85rem;">{{ g.fecha ? (g.fecha | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
             <td>{{ g.usuario?.username || '—' }}</td>

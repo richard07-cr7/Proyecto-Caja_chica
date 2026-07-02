@@ -30,11 +30,11 @@
       </div>
       <div class="form-group">
         <label>Mes</label>
-        <input type="month" [(ngModel)]="mes" />
+        <input type="month" [(ngModel)]="mes" [min]="mesMinimo" (change)="validarMes()" />
       </div>
       <div class="form-group">
         <label>Presupuesto (S/.)</label>
-        <input type="number" [(ngModel)]="presupuestoMensual" min="0" step="0.01" />
+        <input type="number" [(ngModel)]="presupuestoMensual" [min]="0" />
       </div>
     </div>
     <button class="btn btn-primary" (click)="asignarPresupuesto()">+ Asignar Presupuesto</button>
@@ -89,15 +89,20 @@
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>ID</th><th>Nombre</th></tr>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Empleados</th>
+          </tr>
         </thead>
         <tbody>
           <tr *ngIf="departamentos.length === 0">
-            <td colspan="2" style="text-align:center; color:var(--texto-soft); padding:2rem;">Sin departamentos</td>
+            <td colspan="3" style="text-align:center; color:var(--texto-soft); padding:2rem;">Sin departamentos</td>
           </tr>
           <tr *ngFor="let d of departamentos">
             <td style="font-family:monospace; color:var(--texto-soft);">{{ d.id }}</td>
             <td>{{ d.nombre }}</td>
+            <td>{{ empleadosPorDepto(d.id) }}</td>
           </tr>
         </tbody>
       </table>

@@ -58,7 +58,7 @@ export class RegistrarGastoComponent implements OnInit {
   });
 }
 
-mesActual = new Date().toISOString().slice(0, 7); // "2026-07"
+mesActual = new Date().toISOString().slice(0, 7); 
 deptoId: number | null = null;
 
 cargarPresupuestos() {

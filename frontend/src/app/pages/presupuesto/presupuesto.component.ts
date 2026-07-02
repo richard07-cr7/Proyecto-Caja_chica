@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { PresupuestoService } from '../../core/services/presupuesto.service';
+import { UsuarioService } from '../../core/services/usuario.service';
 import { PresupuestoArea } from '../../models/presupuesto-area.model';
 import { Departamento } from '../../models/departamento.model';
+import { Usuario } from '../../models/usuario.model';
 
 @Component({
   selector: 'app-presupuesto',
@@ -15,6 +17,7 @@ export class PresupuestoComponent implements OnInit {
 
   presupuestos: PresupuestoArea[] = [];
   departamentos: Departamento[] = [];
+  usuarios: Usuario[] = [];
 
   // Formulario nuevo departamento
   nombreDepto = '';
@@ -27,13 +30,17 @@ export class PresupuestoComponent implements OnInit {
   presupuestoMensual: number | null = null;
   mensajePresupuesto = '';
   tipoMensajePresupuesto = '';
-  mesMinimo = new Date().toISOString().slice(0, 7); 
+  mesMinimo = new Date().toISOString().slice(0, 7);
 
-  constructor(private presupuestoService: PresupuestoService) {}
+  constructor(
+    private presupuestoService: PresupuestoService,
+    private usuarioService: UsuarioService
+  ) { }
 
   ngOnInit() {
     this.cargarDepartamentos();
     this.cargarPresupuestos();
+    this.cargarUsuarios();
   }
 
   cargarDepartamentos() {
@@ -48,6 +55,21 @@ export class PresupuestoComponent implements OnInit {
     });
   }
 
+  cargarUsuarios() {
+    this.usuarioService.listar().subscribe({
+      next: (data) => this.usuarios = data
+    });
+  }
+
+  empleadosPorDepto(deptoId: number): number {
+    return this.usuarios.filter(u => u.departamento?.id === deptoId).length;
+  }
+
+  validarMes() {
+    if (this.mes < this.mesMinimo) {
+      this.mes = this.mesMinimo;
+    }
+  }
   crearDepartamento() {
     if (!this.nombreDepto) {
       this.mensajeDepto = 'Ingresa un nombre para el departamento.';
