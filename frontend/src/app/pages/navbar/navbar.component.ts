@@ -20,7 +20,7 @@ export class NavbarComponent implements OnInit {
     private authService: AuthService,
     private notificacionService: NotificacionService,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.username = this.authService.getUsername();
@@ -28,6 +28,7 @@ export class NavbarComponent implements OnInit {
 
     if (this.authService.estaLogueado()) {
       this.cargarNoLeidas();
+      setInterval(() => this.cargarNoLeidas(), 5000);
     }
   }
 

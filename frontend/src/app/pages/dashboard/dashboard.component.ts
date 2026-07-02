@@ -54,15 +54,20 @@ export class DashboardComponent implements OnInit {
 }
 
   cargarCajas() {
-    this.cajaService.listar().subscribe({
-      next: (data) => {
+  this.cajaService.listar().subscribe({
+    next: (data) => {
+      if (this.esAdmin) {
         this.cajas = data;
-        this.totalCajas = data.length;
-        this.saldoTotal = data.reduce((acc, c) => acc + Number(c.saldoActual), 0);
-      },
-      error: () => this.mostrarMensaje('Error al cargar las cajas.', 'error')
-    });
-  }
+      } else {
+        const deptoId = Number(this.authService.getDepartamentoId());
+        this.cajas = data.filter(c => c.departamento?.id === deptoId);
+      }
+      this.totalCajas = this.cajas.length;
+      this.saldoTotal = this.cajas.reduce((acc, c) => acc + Number(c.saldoActual), 0);
+    },
+    error: () => this.mostrarMensaje('Error al cargar las cajas.', 'error')
+  });
+}
 
   cargarDepartamentos() {
     this.presupuestoService.listarDepartamentos().subscribe({

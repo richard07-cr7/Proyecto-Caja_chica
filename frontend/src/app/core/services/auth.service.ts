@@ -27,6 +27,7 @@ export class AuthService {
   getId() { return localStorage.getItem('id'); }
   getUsername() { return localStorage.getItem('username'); }
   estaLogueado() { return !!this.getToken(); }
-
+  getDepartamentoId() { return localStorage.getItem('departamentoId'); }
+  getDepartamentoNombre() { return localStorage.getItem('departamentoNombre'); }
   logout() { localStorage.clear(); }
 }

@@ -40,25 +40,37 @@ export class RegistrarGastoComponent implements OnInit {
     private authService: AuthService
   ) {}
 
-
   ngOnInit() {
-    this.areaNombre = this.authService.getUsername() || '';
+    this.areaNombre = this.authService.getDepartamentoNombre() || 'Sin área';
+    this.deptoId = Number(this.authService.getDepartamentoId());
     this.cargarCajas();
     this.cargarPresupuestos();
     this.cargarMisGastos();
   }
 
   cargarCajas() {
-    this.cajaService.listar().subscribe({
-      next: (data) => this.cajas = data
-    });
-  }
+  this.cajaService.listar().subscribe({
+    next: (data) => {
+      this.cajas = data.filter(c =>
+        c.departamento?.id === this.deptoId
+      );
+    }
+  });
+}
 
-  cargarPresupuestos() {
-    this.presupuestoService.listarPresupuestos().subscribe({
-      next: (data) => this.presupuestos = data
-    });
-  }
+mesActual = new Date().toISOString().slice(0, 7); // "2026-07"
+deptoId: number | null = null;
+
+cargarPresupuestos() {
+  this.presupuestoService.listarPresupuestos().subscribe({
+    next: (data) => {
+      this.presupuestos = data.filter(p =>
+        p.departamento?.id === this.deptoId &&
+        p.mes === this.mesActual
+      );
+    }
+  });
+}
 
   cargarMisGastos() {
     const id = Number(this.authService.getId());

@@ -27,6 +27,7 @@ export class PresupuestoComponent implements OnInit {
   presupuestoMensual: number | null = null;
   mensajePresupuesto = '';
   tipoMensajePresupuesto = '';
+  mesMinimo = new Date().toISOString().slice(0, 7); 
 
   constructor(private presupuestoService: PresupuestoService) {}
 

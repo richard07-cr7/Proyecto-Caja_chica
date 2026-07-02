@@ -26,7 +26,9 @@
       <div class="form-group">
         <label>Presupuesto del Mes</label>
         <select [(ngModel)]="presupuestoId">
-          <option [value]="null">Sin presupuesto asignado</option>
+          <option [value]="null">
+            {{ presupuestos.length === 0 ? 'Presupuesto no disponible para este mes' : 'Selecciona presupuesto' }}
+          </option>
           <option *ngFor="let p of presupuestos" [value]="p.id">
             {{ p.mes }} — S/. {{ p.presupuestoMensual | number:'1.2-2' }}
           </option>
