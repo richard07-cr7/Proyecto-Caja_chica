@@ -21,13 +21,11 @@ export class DashboardComponent implements OnInit {
   esAdmin = false;
   deptoId: number | null = null;
 
-  // Stats
   totalCajas = 0;
   totalGastos = 0;
   totalPendientes = 0;
   saldoTotal = 0;
 
-  // Formulario nueva caja
   montoInicial: number | null = null;
   mensaje = '';
   tipoMensaje = '';

@@ -17,7 +17,6 @@ export class UsuariosComponent implements OnInit {
   usuarios: Usuario[] = [];
   departamentos: Departamento[] = [];
 
-  // Formulario registrar
   username = '';
   password = '';
   rol = 'EMPLEADO';
@@ -25,7 +24,6 @@ export class UsuariosComponent implements OnInit {
   mensaje = '';
   tipoMensaje = '';
 
-  // Modal editar
   mostrarModal = false;
   editId: number | null = null;
   editUsername = '';

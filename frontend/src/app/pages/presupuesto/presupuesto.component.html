@@ -1,7 +1,6 @@
 <main class="page">
   <h1 class="page-title">Presupuesto por Área</h1>
 
-  <!-- Nuevo departamento -->
   <div class="card">
     <div class="section-header"><h2>Nuevo Departamento</h2></div>
     <div class="msg ok show" *ngIf="mensajeDepto && tipoMensajeDepto === 'ok'">{{ mensajeDepto }}</div>
@@ -15,7 +14,6 @@
     </div>
   </div>
 
-  <!-- Asignar presupuesto -->
   <div class="card">
     <div class="section-header"><h2>Asignar Presupuesto Mensual</h2></div>
     <div class="msg ok show" *ngIf="mensajePresupuesto && tipoMensajePresupuesto === 'ok'">{{ mensajePresupuesto }}</div>
@@ -40,7 +38,6 @@
     <button class="btn btn-primary" (click)="asignarPresupuesto()">+ Asignar Presupuesto</button>
   </div>
 
-  <!-- Tabla presupuestos -->
   <div class="card">
     <div class="section-header">
       <h2>Presupuestos Registrados</h2>
@@ -80,7 +77,6 @@
     </div>
   </div>
 
-  <!-- Tabla departamentos -->
   <div class="card">
     <div class="section-header">
       <h2>Departamentos</h2>

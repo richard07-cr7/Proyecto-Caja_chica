@@ -21,7 +21,6 @@ export class GastosComponent implements OnInit {
   esAdmin = false;
   deptoId: number | null = null;
 
-  // Filtros
   filtroMes = '';
   filtroDepto = '';
   ordenDesc = true;

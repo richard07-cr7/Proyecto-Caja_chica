@@ -19,12 +19,10 @@ export class PresupuestoComponent implements OnInit {
   departamentos: Departamento[] = [];
   usuarios: Usuario[] = [];
 
-  // Formulario nuevo departamento
   nombreDepto = '';
   mensajeDepto = '';
   tipoMensajeDepto = '';
 
-  // Formulario asignar presupuesto
   deptoId: number | null = null;
   mes = '';
   presupuestoMensual: number | null = null;

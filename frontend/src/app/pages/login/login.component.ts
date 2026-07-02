@@ -23,7 +23,6 @@ export class LoginComponent {
     private router: Router,
     private route: ActivatedRoute
   ) {
-    // Si ya está logueado, redirigir al dashboard
     if (this.authService.estaLogueado()) {
       this.router.navigate(['/dashboard']);
     }

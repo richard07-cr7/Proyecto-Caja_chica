@@ -13,7 +13,6 @@ import { AuthService } from './core/services/auth.service';
 export class AppComponent {
   constructor(private authService: AuthService) {}
 
-  // Oculta el navbar en la página de login
   mostrarNavbar() {
     return this.authService.estaLogueado();
   }
