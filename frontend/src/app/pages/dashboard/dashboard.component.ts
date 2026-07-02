@@ -87,14 +87,56 @@ export class DashboardComponent implements OnInit {
       this.mostrarMensaje('Completa todos los campos.', 'error');
       return;
     }
-    this.cajaService.crear(this.montoInicial, this.deptoId).subscribe({
+
+    const mesActual = new Date().toISOString().slice(0, 7);
+    this.presupuestoService.listarPresupuestos().subscribe({
+      next: (presupuestos) => {
+        const presupuesto = presupuestos.find(p =>
+          p.departamento?.id === Number(this.deptoId) &&
+          p.mes === mesActual
+        );
+
+        if (!presupuesto) {
+          this.mostrarMensaje('No hay presupuesto asignado para este departamento en el mes actual.', 'error');
+          return;
+        }
+
+        if (this.montoInicial! > Number(presupuesto.presupuestoMensual)) {
+          this.mostrarMensaje(
+            `El monto no puede superar el presupuesto asignado al departamento: S/. ${presupuesto.presupuestoMensual}`,
+            'error'
+          );
+          return;
+        }
+
+        this.cajaService.crear(this.montoInicial!, Number(this.deptoId)).subscribe({
+          next: () => {
+            this.mostrarMensaje('Caja creada correctamente.', 'ok');
+            this.deptoId = null;
+            this.montoInicial = null;
+            this.cargarCajas();
+          },
+          error: () => this.mostrarMensaje('Error al crear la caja.', 'error')
+        });
+      }
+    });
+  }
+
+  eliminarCaja(id: number) {
+    if (!confirm('¿Eliminar esta caja?')) return;
+
+    this.cajaService.eliminar(id).subscribe({
       next: () => {
-        this.mostrarMensaje('Caja creada correctamente.', 'ok');
-        this.deptoId = null;
-        this.montoInicial = null;
+        this.mostrarMensaje('Caja eliminada correctamente.', 'ok');
         this.cargarCajas();
       },
-      error: () => this.mostrarMensaje('Error al crear la caja.', 'error')
+      error: (err) => {
+        if (err.status === 500 || err.status === 400) {
+          this.mostrarMensaje('No se puede eliminar la caja porque tiene gastos o movimientos asociados.', 'error');
+        } else {
+          this.mostrarMensaje('Error al eliminar la caja.', 'error');
+        }
+      }
     });
   }
 

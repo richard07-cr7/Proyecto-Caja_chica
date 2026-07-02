@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from '../../../environments/environment';
 import { CajaChica } from '../../models/caja-chica.model';
 
@@ -10,31 +10,27 @@ export class CajaService {
 
   constructor(private http: HttpClient) {}
 
-  private headers() {
-    return new HttpHeaders({ Authorization: `Bearer ${localStorage.getItem('token')}` });
-  }
-
   listar() {
-    return this.http.get<CajaChica[]>(this.url, { headers: this.headers() });
+    return this.http.get<CajaChica[]>(this.url);
   }
 
   buscarPorId(id: number) {
-    return this.http.get<CajaChica>(`${this.url}/${id}`, { headers: this.headers() });
+    return this.http.get<CajaChica>(`${this.url}/${id}`);
   }
 
   crear(montoInicial: number, departamentoId: number) {
     const params = new HttpParams()
       .set('montoInicial', String(montoInicial))
       .set('departamentoId', String(departamentoId));
-    return this.http.post<CajaChica>(this.url, null, { headers: this.headers(), params });
+    return this.http.post<CajaChica>(this.url, null, { params });
   }
 
   actualizar(id: number, nuevoMonto: number) {
     const params = new HttpParams().set('nuevoMonto', String(nuevoMonto));
-    return this.http.put<CajaChica>(`${this.url}/${id}`, null, { headers: this.headers(), params });
+    return this.http.put<CajaChica>(`${this.url}/${id}`, null, { params });
   }
 
   eliminar(id: number) {
-    return this.http.delete(`${this.url}/${id}`, { headers: this.headers() });
+    return this.http.delete(`${this.url}/${id}`);
   }
 }
