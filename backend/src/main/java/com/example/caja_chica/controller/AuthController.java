@@ -37,11 +37,12 @@ public class AuthController {
             throw new RuntimeException("Contraseña incorrecta");
         }
 
-        String token = jwtUtil.generateToken(usuario.getUsername(), usuario.getRol());
+        String rolNormalizado = normalizarRol(usuario.getRol());
+        String token = jwtUtil.generateToken(usuario.getUsername(), rolNormalizado);
 
         Map<String, String> response = new HashMap<>();
         response.put("token", token);
-        response.put("rol", usuario.getRol());
+        response.put("rol", rolNormalizado);
         response.put("id", usuario.getId().toString());
         response.put("username", usuario.getUsername());
         response.put("departamentoId",
@@ -49,5 +50,13 @@ public class AuthController {
         response.put("departamentoNombre",
                 usuario.getDepartamento() != null ? usuario.getDepartamento().getNombre() : "");
         return response;
+    }
+
+    private String normalizarRol(String rol) {
+        if (rol == null || rol.isBlank()) {
+            return "";
+        }
+        String rolNormalizado = rol.trim().toUpperCase();
+        return rolNormalizado.startsWith("ROLE_") ? rolNormalizado.substring(5) : rolNormalizado;
     }
 }

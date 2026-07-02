@@ -6,15 +6,17 @@ import { RegistrarGastoComponent } from './pages/registrar-gasto/registrar-gasto
 import { PresupuestoComponent } from './pages/presupuesto/presupuesto.component';
 import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { NotificacionesComponent } from './pages/notificaciones/notificaciones.component';
+import { authGuard } from './core/guards/auth.guard';
+import { adminGuard } from './core/guards/admin.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'gastos', component: GastosComponent },
-  { path: 'registrar-gasto', component: RegistrarGastoComponent },
-  { path: 'presupuesto', component: PresupuestoComponent },
-  { path: 'usuarios', component: UsuariosComponent },
-  { path: 'notificaciones', component: NotificacionesComponent },
+  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+  { path: 'gastos', component: GastosComponent, canActivate: [authGuard] },
+  { path: 'registrar-gasto', component: RegistrarGastoComponent, canActivate: [authGuard] },
+  { path: 'presupuesto', component: PresupuestoComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'usuarios', component: UsuariosComponent, canActivate: [authGuard, adminGuard] },
+  { path: 'notificaciones', component: NotificacionesComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'login' }
 ];

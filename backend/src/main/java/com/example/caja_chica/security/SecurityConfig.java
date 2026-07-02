@@ -9,6 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -59,6 +60,7 @@ public class SecurityConfig {
                     "/css/**",
                     "/js/**")
                 .permitAll()
+                .requestMatchers(HttpMethod.DELETE, "/api/caja/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
@@ -69,10 +71,11 @@ public class SecurityConfig {
         return username -> {
             Usuario usuario = usuarioRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + username));
+            String rolNormalizado = normalizarRol(usuario.getRol());
             return User.builder()
                 .username(usuario.getUsername())
                 .password(usuario.getPassword())
-                .roles(usuario.getRol())
+                .roles(rolNormalizado)
                 .build();
         };
     }
@@ -80,6 +83,14 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();
+    }
+
+    private String normalizarRol(String rol) {
+        if (rol == null || rol.isBlank()) {
+            return "";
+        }
+        String rolNormalizado = rol.trim().toUpperCase();
+        return rolNormalizado.startsWith("ROLE_") ? rolNormalizado.substring(5) : rolNormalizado;
     }
 
     @Bean
