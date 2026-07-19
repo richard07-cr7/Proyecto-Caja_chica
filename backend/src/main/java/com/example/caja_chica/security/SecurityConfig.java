@@ -34,8 +34,8 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowedOriginPatterns(List.of("http://localhost:4200",
-        "https://proyecto-caja-chica.vercel.app","https://*.vercel.app"));
+        config.setAllowedOriginPatterns(List.of("http://localhost:4200","https://gestorcajachica.com",
+        "https://www.gestorcajachica.com","https://proyecto-caja-chica.vercel.app","https://*.vercel.app"));
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         config.setAllowedHeaders(List.of("*"));
         config.setAllowCredentials(true);
